@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html class="has-background-light">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </head>
+
+  <body>
+    <section class="section is-small">
+      <div class="columns">
+        <div class="column p-6">
+          <div class="card">
+            <header class="card-header has-background-primary">
+              <p class="card-header-title has-text-primary-light">
+                Comment Counter
+              </p>
+            </header>
+            <div class="card-content">
+              <div class="content">
+                  <label class="label">File Url</label>
+                  <div class="field is-grouped">
+                    <p class="control is-expanded">
+                      <input id="url" class="input" type="text" placeholder="example: https://drive.google.com/file/d/123">
+                    </p>
+                    <p class="control">
+                      <button class="button is-info" type="button" onclick="submitUrl()">Submit</button>
+                    </p>
+                  </div>
+                  <div id="count" class="field"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script id="template" type="text/x-handlebars-template">
+      {{#if file_name}}
+        <hr />
+        <label class="label">Comment Count for {{file_name}}</label>
+        <h1>{{count}}</h1>
+      {{/if}}
+    </script>
+
+    <script>
+      const source = document.getElementById("template").innerHTML;
+      const template = Handlebars.compile(source);
+      const initial_context = { count: 0, file_name: null };
+
+      updateContext(initial_context)
+
+      function updateContext(ctx) {
+        const html = template(ctx);
+        document.getElementById("count").innerHTML = html;
+      }
+
+      function submitUrl() {
+        const url = document.getElementById('url').value;
+        google.script.run.withSuccessHandler(updateContext).Count(url)
+      }
+    </script>
+  </body>
+</html>
